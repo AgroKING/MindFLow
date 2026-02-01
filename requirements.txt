@@ -1,0 +1,46 @@
+# Core
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+python-multipart==0.0.20
+
+# Database
+sqlalchemy[asyncio]==2.0.37
+asyncpg==0.30.0
+alembic==1.14.1
+pgvector==0.3.6
+
+# Validation & Settings
+pydantic==2.10.5
+pydantic-settings==2.7.1
+email-validator==2.2.0
+
+# Auth
+pyjwt==2.10.1
+passlib[bcrypt]==1.7.4
+
+# Utilities
+python-dateutil==2.9.0
+httpx==0.28.1
+cryptography==44.0.0
+
+
+# Testing
+pytest==8.3.4
+pytest-asyncio==0.25.2
+pytest-cov==6.0.0
+
+# Dev
+black==24.10.0
+ruff==0.9.3
+
+# Agent 3: Chat & AI
+google-genai==1.0.0
+transformers==4.47.1
+torch==2.5.1
+numpy==2.2.2
+# pgvector already included in Database section but good to confirm version, it is 0.3.6 there.
+
+# Agent 4: Insights & Content
+prophet==1.1.6
+pandas==2.2.3
+scikit-learn==1.6.1
