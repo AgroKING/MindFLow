@@ -103,7 +103,7 @@ export const Activities: React.FC = () => {
             </div>
 
             {/* Controls */}
-            <div className="flex flex-col md:flex-row gap-6 sticky top-24 z-20 bg-[#FDFBF7]/90 backdrop-blur-md py-4 -my-4 transition-all">
+            <div className="flex flex-col md:flex-row gap-6 mb-8">
                 {/* Search Bar */}
                 <div className="flex-1 relative group">
                     <div className="absolute left-5 top-1/2 -translate-y-1/2 text-[#94A89A] group-focus-within:text-[#E07A5F] transition-colors duration-300">
@@ -120,13 +120,13 @@ export const Activities: React.FC = () => {
 
                 {/* Filter Tabs */}
                 <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
-                    <div className="flex gap-2 p-1.5 bg-white border border-[#E6DCCD] rounded-2xl shadow-sm">
+                    <div className="flex gap-2 p-1.5 bg-white border border-[#E6DCCD] rounded-2xl shadow-sm h-14 items-center">
                         {CATEGORIES.map(category => (
                             <button
                                 key={category}
                                 onClick={() => setActiveCategory(category)}
                                 className={cn(
-                                    "px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap",
+                                    "px-5 py-2 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap h-full flex items-center",
                                     activeCategory === category
                                         ? "bg-[#E07A5F] text-white shadow-md"
                                         : "text-[#595959] hover:bg-[#E6DCCD]/30 hover:text-[#2C2C2C]"

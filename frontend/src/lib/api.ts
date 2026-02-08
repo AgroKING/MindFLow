@@ -18,20 +18,48 @@ const api = axios.create({
     headers: {
         'Content-Type': 'application/json',
     },
-    timeout: 10000, // 10s timeout
+    timeout: 45000, // 45s default timeout to handle AI delays
 });
 
-// Request interceptor to add auth token
-api.interceptors.request.use(
-    (config: InternalAxiosRequestConfig) => {
-        const token = localStorage.getItem('auth_token');
-        if (token && config.headers) {
-            config.headers.Authorization = `Bearer ${token}`;
-        }
-        return config;
+// Dedicated instance for AI/Long-running requests with extended timeout
+export const aiApi = axios.create({
+    baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000/api',
+    headers: {
+        'Content-Type': 'application/json',
     },
-    (error) => Promise.reject(error)
-);
+    timeout: 60000, // 60s timeout for AI generation
+});
+
+// Exponential Backoff Utility
+export const exponentialBackoff = async <T>(
+    fn: () => Promise<T>,
+    retries = 3,
+    delay = 1000
+): Promise<T> => {
+    try {
+        return await fn();
+    } catch (error) {
+        if (retries === 0) throw error;
+        await new Promise(resolve => setTimeout(resolve, delay));
+        return exponentialBackoff(fn, retries - 1, delay * 2);
+    }
+};
+
+const attachInterceptors = (instance: typeof api) => {
+    instance.interceptors.request.use(
+        (config: InternalAxiosRequestConfig) => {
+            const token = localStorage.getItem('auth_token');
+            if (token && config.headers) {
+                config.headers.Authorization = `Bearer ${token}`;
+            }
+            return config;
+        },
+        (error) => Promise.reject(error)
+    );
+};
+
+attachInterceptors(api);
+attachInterceptors(aiApi);
 
 // Flag to prevent multiple simultaneous refresh attempts
 let isRefreshing = false;
@@ -48,11 +76,16 @@ const processQueue = (error: any, token: string | null = null) => {
     failedQueue = [];
 };
 
+interface ExtendedAxiosRequestConfig extends InternalAxiosRequestConfig {
+    _retry?: boolean;
+    _retryCount?: number;
+};
+
 // Response interceptor for error handling and token refresh
 api.interceptors.response.use(
     (response: AxiosResponse) => response,
     async (error: AxiosError) => {
-        const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
+        const originalRequest = error.config as ExtendedAxiosRequestConfig;
 
         // Handle 401 Unauthorized (Token expired)
         if (error.response?.status === 401 && !originalRequest._retry) {
@@ -110,10 +143,41 @@ api.interceptors.response.use(
         // Global error handling with toast
         const errorMessage = (error.response?.data as any)?.detail || (error.response?.data as any)?.message || error.message || 'Something went wrong';
 
-        // Don't show toast for 401 as we're handling it (or redirecting)
-        // Also ensure we don't spam toasts for canceled requests
-        if (error.response?.status !== 401 && error.code !== 'ERR_CANCELED') {
-            // Optional: You might want to filter out specific 400 errors if they are form validation
+        // Smart Network Error Handling
+        if (error.message === 'Network Error' || error.code === 'ERR_NETWORK') {
+            // 1. Check if browser reports online status
+            if (!navigator.onLine) {
+                // Truly offline - show gentle message once
+                const now = Date.now();
+                const lastErrorTime = parseInt(localStorage.getItem('last_network_error_time') || '0');
+                const TIME_THRESHOLD = 30000; // 30 seconds between toasts
+
+                if (now - lastErrorTime > TIME_THRESHOLD) {
+                    toast.info("You're offline. Changes will be saved locally.", {
+                        duration: 3000,
+                    });
+                    localStorage.setItem('last_network_error_time', now.toString());
+                }
+                return Promise.reject(error);
+            }
+
+            // 2. Browser says online - try silent retry once
+            if (!originalRequest._retryCount) {
+                originalRequest._retryCount = 1;
+                console.log('Network issue detected, attempting silent retry...');
+
+                // Wait 500ms before retry
+                await new Promise(resolve => setTimeout(resolve, 500));
+                return api(originalRequest);
+            }
+
+            // 3. Retry failed - might be backend down
+            console.warn('Backend may be unavailable. Saving locally.');
+            return Promise.reject(error);
+        }
+
+        // Other errors - show only for non-401 and non-network
+        if (error.response?.status !== 401) {
             toast.error(errorMessage);
         }
 

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '../common/Button';
 import { X, Clock, Users, Award, PlayCircle } from 'lucide-react';
+import { useTheme } from '../../context/ThemeContext';
 
 export interface Activity {
     id: string;
@@ -37,6 +38,7 @@ const BENEFITS = [
 
 export const ActivityDetailModal: React.FC<ActivityDetailModalProps> = ({ isOpen, onClose, activity }) => {
     const [isStarted, setIsStarted] = useState(false);
+    const { theme } = useTheme();
 
     if (!activity) return null;
 
@@ -142,7 +144,17 @@ export const ActivityDetailModal: React.FC<ActivityDetailModalProps> = ({ isOpen
                                     <h3 className="font-serif text-2xl text-[#2C2C2C]">Session in Progress</h3>
                                     <p className="text-[#595959] max-w-sm mx-auto">Focus on your breathing. We'll let you know when the time is up.</p>
                                     <Button
-                                        onClick={() => setIsStarted(false)}
+                                        onClick={() => {
+                                            setIsStarted(false);
+                                            // Play completion sound based on theme
+                                            const audio = new Audio(
+                                                theme === 'star-wars' ? '/sounds/lightsaber-clash.mp3' : // or a dedicated completion sound
+                                                    theme === 'barbie' ? '/sounds/pop-sparkle.mp3' :
+                                                        '/sounds/success-chime.mp3'
+                                            );
+                                            audio.volume = 0.5;
+                                            audio.play().catch(() => { });
+                                        }}
                                         variant="outline"
                                         className="mt-4 border-[#E07A5F] text-[#E07A5F] hover:bg-[#E07A5F]/5"
                                     >

@@ -4,6 +4,7 @@ import { MoodCheckIn } from '../components/dashboard/MoodCheckIn';
 import { InsightsChart } from '../components/dashboard/InsightsChart';
 import { QuickActions } from '../components/dashboard/QuickActions';
 import { RecentActivity } from '../components/dashboard/RecentActivity';
+import { QuoteCarousel } from '../components/dashboard/QuoteCarousel';
 import { motion } from 'framer-motion';
 
 const container = {
@@ -37,6 +38,11 @@ export const Dashboard: React.FC = () => {
             {/* Hero Section - Intimate Greeting */}
             <motion.div variants={item} className="w-full">
                 <WelcomeBanner />
+            </motion.div>
+
+            {/* Philosophical Quote Carousel */}
+            <motion.div variants={item} className="w-full">
+                <QuoteCarousel />
             </motion.div>
 
             {/* Asymmetric Masonry-ish Layout */}

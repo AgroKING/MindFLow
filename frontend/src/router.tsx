@@ -14,6 +14,7 @@ const Progress = lazy(() => import('./pages/Progress').then(m => ({ default: m.P
 const Settings = lazy(() => import('./pages/Settings').then(m => ({ default: m.Settings })));
 const Login = lazy(() => import('./pages/Login').then(m => ({ default: m.Login })));
 const SignUp = lazy(() => import('./pages/SignUp').then(m => ({ default: m.SignUp })));
+const Playground = lazy(() => import('./pages/Playground').then(m => ({ default: m.Playground })));
 
 const SuspenseWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
     <Suspense fallback={<PageSkeleton />}>{children}</Suspense>
@@ -32,6 +33,7 @@ export const router = createBrowserRouter([
             { path: 'activities', element: <SuspenseWrapper><Activities /></SuspenseWrapper> },
             { path: 'progress', element: <SuspenseWrapper><Progress /></SuspenseWrapper> },
             { path: 'settings', element: <SuspenseWrapper><Settings /></SuspenseWrapper> },
+            { path: 'playground', element: <SuspenseWrapper><Playground /></SuspenseWrapper> },
         ],
     },
     { path: '/login', element: <SuspenseWrapper><Login /></SuspenseWrapper> },

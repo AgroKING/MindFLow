@@ -1,4 +1,4 @@
-import api from '../lib/api';
+import api, { aiApi, exponentialBackoff } from '../lib/api';
 
 export const chatService = {
     async getHistory(userId?: string) {
@@ -8,8 +8,10 @@ export const chatService = {
     },
 
     async getAIResponse(message: string) {
-        const response = await api.post('/chat/ai-response', { message });
-        return response.data;
+        return exponentialBackoff(async () => {
+            const response = await aiApi.post('/chat/ai-response', { message });
+            return response.data;
+        });
     },
 
     async uploadAttachment(file: File) {

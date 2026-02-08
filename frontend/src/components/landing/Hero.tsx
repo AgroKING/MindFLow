@@ -5,7 +5,7 @@ import { ArrowRight, Play } from 'lucide-react';
 
 export const Hero: React.FC = () => {
     return (
-        <section className="relative overflow-hidden pt-32 pb-20 lg:pt-48 lg:pb-32">
+        <section className="relative overflow-hidden pt-20 pb-16 lg:pt-32 lg:pb-24">
             <div className="absolute inset-0 bg-gradient-to-b from-blue-50/50 to-transparent pointer-events-none" />
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <div className="text-center max-w-4xl mx-auto">

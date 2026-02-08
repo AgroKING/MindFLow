@@ -54,16 +54,43 @@ export const useJournalStore = create<JournalState>((set) => ({
     },
 
     addEntry: async (data) => {
-        set({ isLoading: true, error: null });
+        // Create optimistic entry with temporary ID
+        const optimisticEntry: JournalEntry = {
+            id: `temp-${Date.now()}`,
+            title: data.title || 'Untitled Entry',
+            content: data.content || '',
+            date: data.date || new Date().toISOString(),
+            tags: data.tags || [],
+            mood: data.mood || '😐',
+            moodScore: data.moodScore
+        };
+
+        // Immediately add to UI (optimistic update)
+        set((state) => ({
+            entries: [optimisticEntry, ...state.entries],
+            currentEntry: optimisticEntry,
+            isLoading: false
+        }));
+
+        // Save to backend in background
         try {
             const newEntry = await journalService.createEntry(data);
+
+            // Replace optimistic entry with real entry from server
             set((state) => ({
-                entries: [newEntry, ...state.entries],
+                entries: state.entries.map(e =>
+                    e.id === optimisticEntry.id ? newEntry : e
+                ),
                 currentEntry: newEntry,
-                isLoading: false
+                error: null
             }));
         } catch (error: any) {
-            set({ error: error.message || 'Failed to create entry', isLoading: false });
+            // On error, remove the optimistic entry and show error
+            set((state) => ({
+                entries: state.entries.filter(e => e.id !== optimisticEntry.id),
+                currentEntry: null,
+                error: error.message || 'Failed to create entry'
+            }));
             throw error;
         }
     },

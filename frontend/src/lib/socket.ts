@@ -9,6 +9,7 @@ export interface ChatMessage {
     timestamp: string;
     sessionId?: string;
     attachments?: string[];
+    status?: 'sending' | 'sent' | 'error';
 }
 
 export interface TypingEvent {

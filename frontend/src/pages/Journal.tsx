@@ -6,6 +6,7 @@ import { Button } from '../components/common/Button';
 import { motion } from 'framer-motion';
 import { Plus, X } from 'lucide-react';
 import { useJournalStore } from '../store/useJournalStore';
+import { useTheme } from '../context/ThemeContext';
 import { toast } from 'sonner';
 
 const container = {
@@ -24,6 +25,7 @@ const item = {
 export const Journal: React.FC = () => {
     const [isEditorOpen, setIsEditorOpen] = useState(false);
     const [selectedEntryId, setSelectedEntryId] = useState<string | null>(null);
+    const { theme } = useTheme();
 
     const { entries, fetchEntries, addEntry, isLoading } = useJournalStore();
 
@@ -72,7 +74,18 @@ export const Journal: React.FC = () => {
                     <h1 className="text-3xl font-bold tracking-tight">Journal</h1>
                     <p className="text-gray-500 mt-1">Capture your thoughts and reflections</p>
                 </div>
-                <Button onClick={() => setIsEditorOpen(!isEditorOpen)}>
+                <Button onClick={() => {
+                    const audio = new Audio(
+                        theme === 'star-wars' ? '/sounds/lightsaber-on.mp3' :
+                            theme === 'breaking-bad' ? '/sounds/science-bloop.mp3' :
+                                theme === 'barbie' ? '/sounds/pop-sparkle.mp3' :
+                                    '/sounds/click-modern.mp3'
+                    );
+                    audio.volume = 0.4;
+                    audio.play().catch(() => { });
+
+                    setIsEditorOpen(!isEditorOpen);
+                }}>
                     {isEditorOpen ? (
                         <>
                             <X className="mr-2 h-4 w-4" /> Close Editor

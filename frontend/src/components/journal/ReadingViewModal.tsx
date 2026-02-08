@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '../common/Button';
 import { X, Edit, Trash2, Share2, Sparkles, Loader2 } from 'lucide-react';
 import { format } from 'date-fns';
+import { chatService } from '../../services/chat.service';
 
 interface ReadingViewModalProps {
     isOpen: boolean;
@@ -20,13 +21,18 @@ export const ReadingViewModal: React.FC<ReadingViewModalProps> = ({ isOpen, onCl
     const [isLoadingAI, setIsLoadingAI] = React.useState(false);
     const [aiResponse, setAiResponse] = React.useState<string | null>(null);
 
-    const handleGetAIFeedback = () => {
+    const handleGetAIFeedback = async () => {
         setIsLoadingAI(true);
-        // Simulate AI response
-        setTimeout(() => {
-            setAiResponse("I notice you've been reflecting on some challenging emotions today. It's great that you're taking time to process these feelings. Consider trying a 5-minute breathing exercise when you feel overwhelmed. Remember, it's okay to take things one step at a time.");
+        try {
+            // content is guaranteed to be string here due to ensure
+            const response = await chatService.getAIResponse(entry?.content || '');
+            setAiResponse(response.message || response.content || response);
+        } catch (error) {
+            console.error('Failed to get AI feedback', error);
+            setAiResponse("I'm having trouble connecting to your AI coach right now. Please check your connection and try again in a moment.");
+        } finally {
             setIsLoadingAI(false);
-        }, 2000);
+        }
     };
 
     if (!entry) return null;
@@ -73,11 +79,17 @@ export const ReadingViewModal: React.FC<ReadingViewModalProps> = ({ isOpen, onCl
                                     {entry.title}
                                 </h1>
 
+                                {/* Content - Strip HTML for display */}
                                 <div
-                                    className="prose prose-lg max-w-none text-gray-700 leading-relaxed"
+                                    className="prose prose-lg max-w-none text-gray-700 leading-relaxed whitespace-pre-wrap"
                                     style={{ fontFamily: 'Merriweather, serif' }}
-                                    dangerouslySetInnerHTML={{ __html: entry.content }}
-                                />
+                                >
+                                    {(() => {
+                                        const tmp = document.createElement('DIV');
+                                        tmp.innerHTML = entry.content;
+                                        return tmp.textContent || tmp.innerText || '';
+                                    })()}
+                                </div>
 
                                 {/* Tags */}
                                 <div className="mt-8 flex flex-wrap gap-2">

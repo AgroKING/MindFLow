@@ -16,6 +16,13 @@ export const JournalArchive: React.FC<JournalArchiveProps> = ({ entries, onEntry
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
     const [searchQuery, setSearchQuery] = useState('');
 
+    // Helper function to strip HTML tags AND decode HTML entities
+    const stripHtml = (html: string): string => {
+        const tmp = document.createElement('DIV');
+        tmp.innerHTML = html;
+        return tmp.textContent || tmp.innerText || '';
+    };
+
     const filteredEntries = entries.filter(entry =>
         entry.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         entry.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -33,7 +40,7 @@ export const JournalArchive: React.FC<JournalArchiveProps> = ({ entries, onEntry
     const mapToEntry = (entry: JournalEntry) => ({
         id: entry.id,
         title: entry.title,
-        preview: entry.content.replace(/<[^>]*>/g, '').substring(0, 150) + '...',
+        preview: stripHtml(entry.content).substring(0, 150) + '...',
         date: new Date(entry.date),
         mood: entry.mood || '😐',
         tags: entry.tags || []
@@ -44,12 +51,12 @@ export const JournalArchive: React.FC<JournalArchiveProps> = ({ entries, onEntry
             {/* Search & Filters */}
             <div className="flex flex-col md:flex-row gap-4">
                 <div className="relative flex-1">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground pointer-events-none" />
                     <Input
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="Search entries..."
-                        className="pl-10 bg-white shadow-sm"
+                        placeholder="Search entries, tags, or content..."
+                        className="pl-12 h-12 text-base bg-white shadow-sm border-gray-200 focus:border-primary focus:ring-primary/20 rounded-xl transition-all"
                     />
                 </div>
 
