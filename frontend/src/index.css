@@ -1,0 +1,332 @@
+@import "tailwindcss";
+
+@theme {
+  /* Colors - "Calm Luxury" Palette */
+  --color-sage: #7FA99B;
+  --color-slate: #2E5266;
+  --color-sand: #D4A574;
+  --color-cream: #F8F5F2;
+  --color-cloud: #E8EBF0;
+
+  /* Mapping to semantic names for backward compatibility/standardization */
+  --color-primary: var(--color-sage);
+  --color-secondary: var(--color-slate);
+  --color-accent: var(--color-sand);
+  --color-neutral: var(--color-slate);
+  --color-canvas: var(--color-cream);
+  --color-background-subtle: var(--color-cloud);
+
+  /* Spacing */
+  --spacing-4px: 4px;
+  --spacing-8px: 8px;
+  --spacing-12px: 12px;
+  --spacing-16px: 16px;
+  --spacing-24px: 24px;
+  --spacing-32px: 32px;
+  --spacing-48px: 48px;
+  --spacing-64px: 64px;
+  --spacing-96px: 96px;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(46, 82, 102, 0.04);
+  --shadow-md: 0 4px 16px rgba(46, 82, 102, 0.06);
+  --shadow-lg: 0 12px 32px rgba(46, 82, 102, 0.08);
+  --shadow-xl: 0 20px 48px rgba(46, 82, 102, 0.12);
+  --shadow-organic-sm: 2px 4px 16px rgba(44, 44, 44, 0.03);
+  --shadow-organic-md: 4px 8px 24px rgba(44, 44, 44, 0.06);
+  --shadow-input-focus: 0 2px 12px rgba(0, 0, 0, 0.04);
+
+  /* Typography */
+  --font-serif: "Crimson Pro", serif;
+  --font-sans: "Manrope", "Didact Gothic", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  /* Gradients */
+  --gradient-hero: linear-gradient(160deg, #E8EBF0 0%, #D1D9E0 100%);
+  --gradient-card: linear-gradient(135deg, #FFFFFF 0%, #F8FAFB 100%);
+  --gradient-accent: linear-gradient(90deg, #7FA99B, #6E9C8E);
+
+  /* Transitions */
+  --transition-default: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Import Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Manrope:wght@300;400;500;600;700&family=Reenie+Beanie&display=swap');
+
+
+@layer base {
+  :root {
+    /* Human-Centered "Warm Earth" Palette (Default) */
+    --color-cream: #FDFBF7;
+    --color-paper: #F8F5F0;
+    --color-sand: #E6DCCD;
+    --color-ink: #2C2C2C;
+    --color-ink-light: #595959;
+    --color-terracotta: #E07A5F;
+    --color-clay: #D48C70;
+    --color-sage: #94A89A;
+    --color-olive: #7FA99B;
+    --color-mustard: #E9C46A;
+    --color-slate: #819FA0;
+
+    /* Logic Variables - Mapped to Palette */
+    --background: var(--color-cream);
+    --foreground: var(--color-ink);
+    --card: #FFFFFF;
+    --card-foreground: var(--color-ink);
+    --popover: #FFFFFF;
+    --popover-foreground: var(--color-ink);
+    --primary: var(--color-olive);
+    --primary-foreground: #FFFFFF;
+    --secondary: var(--color-paper);
+    --secondary-foreground: var(--color-ink);
+    --muted: var(--color-paper);
+    --muted-foreground: var(--color-ink-light);
+    --accent: var(--color-sand);
+    --accent-foreground: var(--color-ink);
+    --destructive: var(--color-terracotta);
+    --destructive-foreground: #FFFFFF;
+    --border: var(--color-sand);
+    --input: var(--color-paper);
+    --ring: var(--color-olive);
+
+    --radius: 1rem;
+    --radius-sm: 0.5rem;
+    --radius-md: 1rem;
+    --radius-lg: 1.5rem;
+    --radius-blob: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  }
+
+  /* THE WEB-SLINGER THEME (Spider-Man) */
+  [data-theme='the-web-slinger'] {
+    /* Spider-Man Colors */
+    --color-spidey-red: #E23636;
+    --color-spidey-blue: #013875;
+    --color-web-white: #F5F5F5;
+    --color-shadow-black: #1a1a1a;
+
+    --background: var(--color-shadow-black);
+    --foreground: var(--color-web-white);
+    --card: #252525;
+    --card-foreground: var(--color-web-white);
+
+    --primary: var(--color-spidey-red);
+    --primary-foreground: #FFFFFF;
+
+    --secondary: var(--color-spidey-blue);
+    --secondary-foreground: #FFFFFF;
+
+    --accent: var(--color-spidey-red);
+    --accent-foreground: #FFFFFF;
+
+    --muted: #2a2a2a;
+    --muted-foreground: #a0a0a0;
+
+    --border: var(--color-spidey-red);
+    --input: #252525;
+    --ring: var(--color-spidey-blue);
+
+    --radius: 0.5rem;
+    --radius-sm: 0.375rem;
+    --radius-md: 0.75rem;
+    --radius-lg: 1rem;
+    --radius-blob: 50% 50% 50% 50%;
+
+    /* Web Effect */
+    --shadow-web: 0 0 20px rgba(226, 54, 54, 0.3);
+
+    /* Spider web background pattern */
+    background-image:
+      radial-gradient(circle, transparent 20%, rgba(226, 54, 54, 0.05) 20%, rgba(226, 54, 54, 0.05) 40%, transparent 40%),
+      radial-gradient(circle, transparent 20%, rgba(1, 56, 117, 0.05) 20%, rgba(1, 56, 117, 0.05) 40%, transparent 40%),
+      linear-gradient(90deg, rgba(226, 54, 54, 0.03) 1px, transparent 1px),
+      linear-gradient(0deg, rgba(1, 56, 117, 0.03) 1px, transparent 1px);
+    background-size: 100px 100px, 150px 150px, 50px 50px, 50px 50px;
+    background-position: 0 0, 75px 75px, 0 0, 0 0;
+  }
+
+  /* THE EMPIRE THEME (Breaking Bad) */
+  [data-theme='the-empire'] {
+    /* Breaking Bad Colors */
+    --color-toxic-green: #406838;
+    --color-meth-blue: #3F8CA8;
+    --color-desert-yellow: #D4A574;
+    --color-desert-gray: #8B8680;
+    --color-lab-white: #F2F2F2;
+
+    --background: #1a1a1a;
+    --foreground: var(--color-lab-white);
+    --card: #262626;
+    --card-foreground: var(--color-lab-white);
+
+    --primary: var(--color-meth-blue);
+    --primary-foreground: #000000;
+
+    --secondary: var(--color-toxic-green);
+    --secondary-foreground: #FFFFFF;
+
+    --accent: var(--color-desert-yellow);
+    --accent-foreground: #000000;
+
+    --muted: #2d2d2d;
+    --muted-foreground: var(--color-desert-gray);
+
+    --border: var(--color-toxic-green);
+    --input: #262626;
+    --ring: var(--color-meth-blue);
+
+    --radius: 0.25rem;
+    --radius-sm: 0.125rem;
+    --radius-md: 0.375rem;
+    --radius-lg: 0.5rem;
+    --radius-blob: 0;
+
+    /* Chemical Glow */
+    --shadow-chemical: 0 0 25px rgba(63, 140, 168, 0.4);
+    --shadow-toxic: 0 0 15px rgba(64, 104, 56, 0.3);
+
+    /* Chemistry bubbles background pattern */
+    background-image:
+      radial-gradient(circle at 20% 50%, rgba(63, 140, 168, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(64, 104, 56, 0.08) 0%, transparent 50%),
+      radial-gradient(circle at 40% 20%, rgba(212, 165, 116, 0.05) 0%, transparent 50%),
+      radial-gradient(2px 2px at 25% 40%, rgba(63, 140, 168, 0.3), transparent),
+      radial-gradient(2px 2px at 75% 60%, rgba(64, 104, 56, 0.3), transparent),
+      radial-gradient(1px 1px at 50% 85%, rgba(212, 165, 116, 0.2), transparent);
+    background-size: 100% 100%, 100% 100%, 100% 100%, 200px 200px, 180px 180px, 150px 150px;
+    background-position: 0 0, 0 0, 0 0, 0 0, 40px 60px, 80px 20px;
+  }
+
+  /* ENCHANTED TALES THEME (Snow White/Rapunzel/Barbie) */
+  [data-theme='enchanted-tales'] {
+    /* Barbie Colors */
+    --color-hot-pink: #E0218A;
+    --color-pastel-pink: #FFB7D5;
+    --color-barbie-turquoise: #00D4D4;
+    --color-plastic-white: #FFFFFF;
+    --color-glitter-gold: #FFD700;
+
+    --background: #FFE5F1;
+    --foreground: #2C0A1F;
+    --card: var(--color-plastic-white);
+    --card-foreground: #2C0A1F;
+
+    --primary: var(--color-hot-pink);
+    --primary-foreground: #FFFFFF;
+
+    --secondary: var(--color-pastel-pink);
+    --secondary-foreground: #2C0A1F;
+
+    --accent: var(--color-barbie-turquoise);
+    --accent-foreground: #000000;
+
+    --muted: #FFF0F7;
+    --muted-foreground: #B366A3;
+
+    --border: var(--color-hot-pink);
+    --input: var(--color-plastic-white);
+    --ring: var(--color-hot-pink);
+
+    --radius: 1.5rem;
+    --radius-sm: 1rem;
+    --radius-md: 1.5rem;
+    --radius-lg: 2rem;
+    --radius-blob: 60% 40% 50% 50% / 60% 50% 40% 60%;
+
+    /* Sparkle Effect */
+    --shadow-sparkle: 0 0 30px rgba(224, 33, 138, 0.5);
+    --shadow-glitter: 0 2px 20px rgba(255, 215, 0, 0.3);
+
+    /* Fairytale / Barbie background pattern - sparkles and floating motifs */
+    background-image:
+      radial-gradient(circle at 10% 10%, rgba(255, 255, 255, 0.4) 0%, transparent 10%),
+      radial-gradient(circle at 90% 20%, rgba(224, 33, 138, 0.1) 0%, transparent 15%),
+      radial-gradient(circle at 30% 70%, rgba(0, 212, 212, 0.1) 0%, transparent 20%),
+      radial-gradient(circle at 70% 40%, rgba(255, 215, 0, 0.05) 0%, transparent 25%),
+      /* Sparkles */
+      radial-gradient(1px 1px at 15% 15%, #fff, transparent),
+      radial-gradient(1.5px 1.5px at 45% 35%, #fff, transparent),
+      radial-gradient(1px 1px at 85% 75%, #fff, transparent),
+      radial-gradient(2px 2px at 25% 85%, var(--color-glitter-gold), transparent),
+      radial-gradient(1.5px 1.5px at 65% 55%, var(--color-glitter-gold), transparent);
+    background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100px 100px, 150px 150px, 200px 200px, 120px 120px, 180px 180px;
+    background-attachment: fixed;
+  }
+
+  body {
+    @apply bg-[var(--background)] text-[var(--foreground)] antialiased font-sans selection:bg-[var(--color-sage)] selection:text-white;
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-serif font-medium tracking-tight text-[var(--color-ink)];
+  }
+
+  /* Handwritten Notes */
+  .font-hand {
+    font-family: 'Reenie Beanie', cursive;
+  }
+}
+
+@layer components {
+
+  .card-organic {
+    @apply bg-white rounded-3xl border border-[var(--color-sand)] shadow-organic-sm transition-all duration-500 hover:shadow-organic-md hover:-translate-y-1;
+  }
+
+  /* Soft Input - looks like paper */
+  .input-paper {
+    @apply bg-[var(--color-paper)] border border-transparent rounded-2xl px-5 py-3 text-[var(--color-ink)] placeholder:text-[var(--color-ink-light)]/50 focus:bg-white focus:border-[var(--color-sand)] focus:ring-0 shadow-input-focus transition-all duration-300 font-sans;
+  }
+
+  /* Button - tactile feel */
+  .btn-organic {
+    @apply rounded-xl font-semibold transition-all duration-300 active:scale-[0.98];
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .mask-blob {
+    mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23FF0066' d='M44.7,-76.4C58.9,-69.2,71.8,-59.1,81.6,-46.6C91.4,-34.1,98.1,-19.2,95.8,-5.3C93.5,8.6,82.2,21.5,70.9,32.3C59.6,43.1,48.3,51.8,36.4,59.3C24.5,66.8,12,73.1,-1.2,75.1C-14.3,77.1,-29.4,74.9,-42.6,68.1C-55.8,61.3,-67.1,49.9,-74.6,36.5C-82.1,23.1,-85.8,7.7,-83.4,-6.6C-81,-20.9,-72.5,-34.1,-61.6,-44.2C-50.7,-54.3,-37.4,-61.3,-24.1,-69.3C-10.8,-77.3,2.5,-86.3,16.2,-87.3C29.9,-88.3,44,-81.3,44.7,-76.4Z' transform='translate(100 100)' /%3E%3C/svg%3E");
+    mask-repeat: no-repeat;
+    mask-position: center;
+  }
+}
+
+/* Utility Classes */
+.bg-hero-gradient {
+  background: var(--gradient-hero);
+}
+
+.bg-card-gradient {
+  background: var(--gradient-card);
+}
+
+.bg-accent-gradient {
+  background: var(--gradient-accent);
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--color-sage);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
