@@ -2,7 +2,12 @@ from datetime import datetime, timedelta, timezone
 from dataclasses import dataclass
 import pandas as pd
 import numpy as np
-from prophet import Prophet
+
+try:
+    from prophet import Prophet
+except ImportError:
+    Prophet = None
+
 import logging
 
 logger = logging.getLogger(__name__)
@@ -142,6 +147,10 @@ class PatternDetector:
 
     async def _detect_trend(self, df: pd.DataFrame) -> PatternInsight | None:
         """Use Prophet to detect mood trend over time."""
+        if Prophet is None:
+            logger.warning("Prophet not installed. Trend detection disabled.")
+            return None
+            
         try:
             # Prepare data for Prophet
             prophet_df = df.groupby(df["date"].dt.date)["mood_score"].mean().reset_index()

@@ -40,7 +40,16 @@ CRISIS_ESCALATION_PROMPT = """IMPORTANT: The user may be in crisis.
 
 class GeminiClient:
     def __init__(self):
-        self.client = genai.Client(api_key=settings.gemini_api_key)
+        try:
+            if settings.gemini_api_key:
+                self.client = genai.Client(api_key=settings.gemini_api_key)
+            else:
+                self.client = None
+                logger.warning("Gemini API Key not found. AI features will be disabled.")
+        except Exception as e:
+            self.client = None
+            logger.error(f"Failed to initialize Gemini client: {e}")
+            
         self.model = "gemini-2.5-flash"  # or "gemini-2.5-pro" for better quality
 
     async def chat(
@@ -69,6 +78,14 @@ class GeminiClient:
                 "suggestions": list[str] | None
             }
         """
+        if not self.client:
+            return {
+                "content": "AI features are currently disabled (missing API key).",
+                "tokens_used": 0,
+                "model": "disabled",
+                "suggestions": None,
+            }
+
         try:
             # Build system instruction
             system = system_prompt or MENTAL_HEALTH_SYSTEM_PROMPT

@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.dependencies import get_current_user, get_db
+from app.api.deps import get_current_user, get_db
 from app.models.user import User
 from app.schemas.recommendation import RecommendationResponse, PaginatedRecommendations
 from app.services.recommendation_service import RecommendationService

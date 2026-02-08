@@ -1,4 +1,8 @@
-from sentence_transformers import SentenceTransformer
+try:
+    from sentence_transformers import SentenceTransformer
+except ImportError:
+    SentenceTransformer = None
+
 from functools import lru_cache
 import numpy as np
 import logging
@@ -16,13 +20,21 @@ class EmbeddingService:
     @property
     def model(self):
         if self._model is None:
-            logger.info("Loading embedding model...")
-            self._model = SentenceTransformer("all-MiniLM-L6-v2")
+            if SentenceTransformer is None:
+                logger.warning("sentence-transformers not installed. Embeddings will be zero vectors.")
+                return None
+            
+            try:
+                logger.info("Loading embedding model...")
+                self._model = SentenceTransformer("all-MiniLM-L6-v2")
+            except Exception as e:
+                logger.error(f"Failed to load embedding model: {e}")
+                return None
         return self._model
 
     async def generate(self, text: str) -> list[float]:
         """Generate embedding vector for text."""
-        if not text:
+        if not text or self.model is None:
             return [0.0] * self.dimension
 
         try:
@@ -34,8 +46,8 @@ class EmbeddingService:
 
     async def generate_batch(self, texts: list[str]) -> list[list[float]]:
         """Generate embeddings for multiple texts."""
-        if not texts:
-            return []
+        if not texts or self.model is None:
+            return [[0.0] * self.dimension for _ in texts]
 
         try:
             embeddings = self.model.encode(texts, convert_to_numpy=True)
