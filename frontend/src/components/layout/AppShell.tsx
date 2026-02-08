@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Outlet, NavLink, useLocation } from 'react-router-dom';
-import { LayoutDashboard, BookOpen, Smile, MessageSquare, Settings, Menu, Bell, Search, Activity, BarChart, Palette } from 'lucide-react';
+import { LayoutDashboard, BookOpen, Smile, MessageSquare, Settings, Menu, Bell, Search, Activity, BarChart, Palette, Flower2 } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { Button } from '../common/Button';
 import { MobileNav } from './MobileNav';
@@ -65,11 +65,7 @@ export const AppShell: React.FC = () => {
                         <div className="relative group">
                             <div className="absolute -inset-1 bg-gradient-to-r from-primary/50 to-secondary/30 rounded-full blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
                             <div className="relative flex items-center justify-center w-12 h-12 rounded-full bg-card border-2 border-primary/20 text-primary shadow-xl overflow-hidden ring-4 ring-background">
-                                <svg viewBox="0 0 40 40" className="w-8 h-8 fill-current">
-                                    <path d="M20 5C11.7157 5 5 11.7157 5 20C5 28.2843 11.7157 35 20 35C28.2843 35 35 28.2843 35 20C35 11.7157 28.2843 5 20 5ZM20 32C13.3726 32 8 26.6274 8 20C8 13.3726 13.3726 8 20 8C26.6274 8 32 13.3726 32 20C32 26.6274 26.6274 32 20 32Z" opacity="0.2" />
-                                    <path d="M20 10C14.4772 10 10 14.4772 10 20C10 25.5228 14.4772 30 20 30C25.5228 30 30 25.5228 30 20C30 14.4772 25.5228 10 20 10ZM14 20C14 16.6863 16.6863 14 20 14C23.3137 14 26 16.6863 26 20C26 23.3137 23.3137 26 20 26C16.6863 26 14 23.3137 14 20Z" />
-                                    <path d="M20 16C17.7909 16 16 17.7909 16 20C16 22.2091 17.7909 24 20 24C22.2091 24 24 22.2091 24 20C24 17.7909 22.2091 16 20 16Z" className="animate-pulse" />
-                                </svg>
+                                <Flower2 className="w-8 h-8 animate-pulse text-emerald-500" />
                             </div>
                         </div>
                         <div className="flex flex-col">
